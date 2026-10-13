@@ -79,54 +79,66 @@ class Versiculo
         return (int) $this->pdo->lastInsertId();
     }
 
-    public function atualizar(int $id, int $usuarioId, string $texto, ?string $foto = null): bool
+    public function atualizar(
+        int $id,
+        int $usuarioId,
+        string $texto,
+        ?string $foto = null,
+        bool $administrador = false
+    ): bool
     {
+        $condicaoProprietario = $administrador ? '' : ' AND usuario_id = :usuario_id';
+        $parametros = [
+            'id' => $id,
+            'versiculo' => $texto,
+        ];
+
+        if (!$administrador) {
+            $parametros['usuario_id'] = $usuarioId;
+        }
+
         if ($foto === null) {
             $stmt = $this->pdo->prepare(
                 'UPDATE versiculo
                  SET versiculo = :versiculo,
                      atualizado_em = CURRENT_TIMESTAMP
-                 WHERE id = :id AND usuario_id = :usuario_id'
+                 WHERE id = :id' . $condicaoProprietario
             );
 
-            $stmt->execute([
-                'id' => $id,
-                'usuario_id' => $usuarioId,
-                'versiculo' => $texto,
-            ]);
+            $stmt->execute($parametros);
 
             return $stmt->rowCount() > 0;
         }
 
+        $parametros['foto'] = $foto;
         $stmt = $this->pdo->prepare(
             'UPDATE versiculo
              SET versiculo = :versiculo,
                  foto = :foto,
                  atualizado_em = CURRENT_TIMESTAMP
-             WHERE id = :id AND usuario_id = :usuario_id'
+             WHERE id = :id' . $condicaoProprietario
         );
 
-        $stmt->execute([
-            'id' => $id,
-            'usuario_id' => $usuarioId,
-            'versiculo' => $texto,
-            'foto' => $foto,
-        ]);
+        $stmt->execute($parametros);
 
         return $stmt->rowCount() > 0;
     }
 
-    public function apagar(int $id, int $usuarioId): bool
+    public function apagar(int $id, int $usuarioId, bool $administrador = false): bool
     {
+        $condicaoProprietario = $administrador ? '' : ' AND usuario_id = :usuario_id';
+        $parametros = ['id' => $id];
+
+        if (!$administrador) {
+            $parametros['usuario_id'] = $usuarioId;
+        }
+
         $stmt = $this->pdo->prepare(
             'DELETE FROM versiculo
-             WHERE id = :id AND usuario_id = :usuario_id'
+             WHERE id = :id' . $condicaoProprietario
         );
 
-        $stmt->execute([
-            'id' => $id,
-            'usuario_id' => $usuarioId,
-        ]);
+        $stmt->execute($parametros);
 
         return $stmt->rowCount() > 0;
     }

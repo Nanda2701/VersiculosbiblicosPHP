@@ -18,7 +18,7 @@
 <main class="container py-5">
     <section class="form-card auth-card mx-auto">
         <h1 class="h3 mb-2">Entrar</h1>
-        <p class="text-muted mb-4">Entre para publicar os seus versículos.</p>
+        <p class="text-muted mb-4">Entre para publicar versículos. A conta de administrador também pode editar e apagar todas as publicações.</p>
         <?php if (!empty($erro)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($erro, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
         <?php endif; ?>

@@ -39,7 +39,7 @@
             <?php endif; ?>
 
             <?php if ($versiculo): ?>
-                <p class="text-muted">A editar publicação de <?= htmlspecialchars($usuarioAtual['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>.</p>
+                <p class="text-muted">A editar publicação<?= !empty($usuarioAtual['administrador']) ? ' como administrador' : '' ?>.</p>
                 <form method="post" action="index.php?pagina=editar&id=<?= (int) $versiculo['id'] ?>" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
                     <div class="mb-3">

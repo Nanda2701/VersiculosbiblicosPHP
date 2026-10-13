@@ -45,7 +45,7 @@
                 <p class="text-muted mb-0">
                     Inserido em <?= htmlspecialchars($versiculo['criado_em'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                 </p>
-                <?php if ($usuarioAtual && (int) ($versiculo['usuario_id'] ?? 0) === (int) $usuarioAtual['id']): ?>
+                <?php if ($usuarioAtual && ((int) ($versiculo['usuario_id'] ?? 0) === (int) $usuarioAtual['id'] || !empty($usuarioAtual['administrador']))): ?>
                     <div class="mt-4 d-flex gap-2 flex-wrap">
                         <a class="btn btn-primary" href="index.php?pagina=editar&id=<?= (int) $versiculo['id'] ?>">Editar</a>
                         <form method="post" action="index.php?pagina=apagar" class="m-0">

@@ -65,7 +65,7 @@
                                    href="index.php?pagina=detalhe&id=<?= (int) $item['id'] ?>">
                                     Ver detalhe
                                 </a>
-                                <?php if ($usuarioAtual && (int) ($item['usuario_id'] ?? 0) === (int) $usuarioAtual['id']): ?>
+                                <?php if ($usuarioAtual && ((int) ($item['usuario_id'] ?? 0) === (int) $usuarioAtual['id'] || !empty($usuarioAtual['administrador']))): ?>
                                     <a class="btn btn-sm btn-warning"
                                        href="index.php?pagina=editar&id=<?= (int) $item['id'] ?>">
                                         Editar

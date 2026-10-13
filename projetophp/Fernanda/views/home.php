@@ -52,7 +52,7 @@ $usuarioAtual = is_array($usuarioAtual ?? null) ? $usuarioAtual : null;
                 <a class="btn btn-ler btn-lg" href="index.php?pagina=detalhe&amp;id=<?= (int) $destaque['id'] ?>">Ler versículo</a>
                 <a class="btn btn-adicionar btn-lg" href="index.php?pagina=inserir">Publicar versículo</a>
             </div>
-            <?php if ($usuarioAtual && (int) ($destaque['usuario_id'] ?? 0) === (int) $usuarioAtual['id']): ?>
+            <?php if ($usuarioAtual && ((int) ($destaque['usuario_id'] ?? 0) === (int) $usuarioAtual['id'] || !empty($usuarioAtual['administrador']))): ?>
                 <div class="d-flex justify-content-center flex-wrap gap-2">
                     <a class="btn btn-primary" href="index.php?pagina=editar&id=<?= (int) $destaque['id'] ?>">Editar</a>
                     <form method="post" action="index.php?pagina=apagar" class="m-0">
@@ -97,7 +97,7 @@ $usuarioAtual = is_array($usuarioAtual ?? null) ? $usuarioAtual : null;
                                        href="index.php?pagina=detalhe&amp;id=<?= (int) $item['id'] ?>">
                                         Ler publicação
                                     </a>
-                                    <?php if ($usuarioAtual && (int) ($item['usuario_id'] ?? 0) === (int) $usuarioAtual['id']): ?>
+                                    <?php if ($usuarioAtual && ((int) ($item['usuario_id'] ?? 0) === (int) $usuarioAtual['id'] || !empty($usuarioAtual['administrador']))): ?>
                                         <a class="btn btn-sm btn-warning"
                                            href="index.php?pagina=editar&id=<?= (int) $item['id'] ?>">
                                             Editar

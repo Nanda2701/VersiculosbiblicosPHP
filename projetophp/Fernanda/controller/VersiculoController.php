@@ -183,7 +183,8 @@ class VersiculoController
         }
 
         $versiculo = $this->modelo->buscarPorId($id);
-        if (!$versiculo || (int) $versiculo['usuario_id'] !== (int) $usuario['id']) {
+        $administrador = $usuario['administrador'];
+        if (!$versiculo || (!$administrador && (int) $versiculo['usuario_id'] !== (int) $usuario['id'])) {
             http_response_code(403);
             $this->render('detalhe', ['versiculo' => $versiculo]);
             return;
@@ -250,7 +251,7 @@ class VersiculoController
                                     @unlink($pastaFotos . '/' . $fotoAntiga);
                                 }
 
-                                if ($this->modelo->atualizar($id, (int) $usuario['id'], $texto, $nomeFoto)) {
+                                if ($this->modelo->atualizar($id, (int) $usuario['id'], $texto, $nomeFoto, $administrador)) {
                                     header('Location: index.php?pagina=detalhe&id=' . $id);
                                     exit;
                                 }
@@ -264,7 +265,7 @@ class VersiculoController
                     }
                 }
             } else {
-                if ($this->modelo->atualizar($id, (int) $usuario['id'], $texto)) {
+                if ($this->modelo->atualizar($id, (int) $usuario['id'], $texto, null, $administrador)) {
                     header('Location: index.php?pagina=detalhe&id=' . $id);
                     exit;
                 }
@@ -304,7 +305,8 @@ class VersiculoController
         }
 
         $versiculo = $this->modelo->buscarPorId($id);
-        if (!$versiculo || (int) $versiculo['usuario_id'] !== (int) $usuario['id']) {
+        $administrador = $usuario['administrador'];
+        if (!$versiculo || (!$administrador && (int) $versiculo['usuario_id'] !== (int) $usuario['id'])) {
             http_response_code(403);
             return;
         }
@@ -312,7 +314,7 @@ class VersiculoController
         $pastaFotos = dirname(__DIR__) . '/foto';
         $foto = is_string($versiculo['foto'] ?? null) ? $versiculo['foto'] : '';
 
-        if ($this->modelo->apagar($id, (int) $usuario['id'])) {
+        if ($this->modelo->apagar($id, (int) $usuario['id'], $administrador)) {
             if ($foto !== '' && is_file($pastaFotos . '/' . $foto)) {
                 @unlink($pastaFotos . '/' . $foto);
             }
@@ -363,6 +365,7 @@ class VersiculoController
                     $_SESSION['usuario'] = [
                         'id' => $id,
                         'nome' => $nome,
+                        'administrador' => false,
                     ];
 
                     header('Location: index.php');
@@ -414,6 +417,7 @@ class VersiculoController
                     $_SESSION['usuario'] = [
                         'id' => (int) $usuario['id'],
                         'nome' => $usuario['nome'],
+                        'administrador' => (bool) $usuario['administrador'],
                     ];
 
                     header('Location: index.php');
@@ -445,12 +449,16 @@ class VersiculoController
     {
         $usuario = $_SESSION['usuario'] ?? null;
 
-        return is_array($usuario)
-            && isset($usuario['id'], $usuario['nome'])
-            && is_int($usuario['id'])
-            && is_string($usuario['nome'])
-            ? $usuario
-            : null;
+        if (!is_array($usuario) || !isset($usuario['id'], $usuario['nome'])
+            || !is_int($usuario['id']) || !is_string($usuario['nome'])) {
+            return null;
+        }
+
+        return [
+            'id' => $usuario['id'],
+            'nome' => $usuario['nome'],
+            'administrador' => ($usuario['administrador'] ?? false) === true,
+        ];
     }
 
     private function tokenValido(): bool

@@ -12,7 +12,7 @@ class Usuario
     public function buscarPorEmail(string $email): ?array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT id, nome, email, senha
+            'SELECT id, nome, email, senha, administrador
              FROM usuario
              WHERE email = :email
              LIMIT 1'
