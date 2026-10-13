@@ -42,7 +42,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha`, `administrador`, `criado_em`) VALUES
 (1, 'Admin Phernnannda', 'admin@Pher.com', '$2y$10$wE3.8lH9L8.wGqD.5qI9xO0XG2O9pXWp3.sY3eF5G7H8I9J0K1L2M', 0, '2026-09-24 20:04:03'),
-(2, 'fernandamello@', 'nandamelo032@hotmail.com', '$2y$10$bau.upbzteRvcahg214Q0uRzldH7tLRrwsjR8wxCVbbE.YjYSt9vG', 1, '2026-10-01 08:50:10');
+(2, 'fernandamello@', '', '$2y$10$bau.upbzteRvcahg214Q0uRzldH7tLRrwsjR8wxCVbbE.YjYSt9vG', 1, '2026-10-01 08:50:10');
 
 -- --------------------------------------------------------
 
